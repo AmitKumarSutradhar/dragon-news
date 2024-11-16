@@ -13,7 +13,7 @@ const NavBar = () => {
             <div className="login">
                 <div className="flex gap-2">
                     <img src={userIcon} alt="" />
-                    <button className="btn btn-neutral rounded-none">Login</button>
+                    <Link to={'/auth/login'} className="btn btn-neutral rounded-none">Login</Link>
                 </div>
             </div>
         </div>
