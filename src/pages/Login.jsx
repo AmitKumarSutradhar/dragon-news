@@ -1,9 +1,12 @@
-import { useContext } from "react";
-import { Link } from "react-router-dom";
+import { useContext, useState } from "react";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { AuthContext } from "../provider/AuthProvider";
 
 const Login = () => {
     const { userLogin, setUser } = useContext(AuthContext);
+    const [error, setError] = useState({});
+    const location = useLocation();
+    const navigate = useNavigate();
 
     const handleSubmit = (e) => {
         e.preventDefault();
@@ -14,9 +17,10 @@ const Login = () => {
             .then((result) => {
                 const user = result.user;
                 setUser(user);
+                navigate(location?.state ? location?.state : "/");
             })
-            .catch((error) => {
-                alert(error.code)
+            .catch((err) => {
+                setError({ ...error, login: err.code })
             })
         console.log(email, password)
     }
@@ -37,6 +41,15 @@ const Login = () => {
                             <span className="label-text">Password</span>
                         </label>
                         <input type="password" name="password" placeholder="password" className="input input-bordered" required />
+
+                        {
+                            error.login && (
+                                <label className="label">
+                                    <a href="#" className="label-text-alt link link-hover text-sm text-red-600">{error.login}</a>
+                                </label>
+                            )
+                        }
+
                         <label className="label">
                             <a href="#" className="label-text-alt link link-hover">Forgot password?</a>
                         </label>
@@ -45,7 +58,7 @@ const Login = () => {
                         <button className="btn btn-neutral">Login</button>
                     </div>
                 </form>
-                <p className="font-semibold text-center">Dont’t Have An Account ? <Link to="/auth/register" className="text-red-500">Register</Link></p>
+                <p className="font-semibold text-center">Don't Have An Account ? <Link to="/auth/register" className="text-red-500">Register</Link></p>
             </div>
         </div>
     );
